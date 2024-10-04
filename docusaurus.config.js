@@ -86,6 +86,12 @@ const config = {
             position: 'left',
             label: 'Docs',
           },
+          {
+            type: 'docSidebar',
+            sidebarId: 'apiDocSidebar',
+            position: 'left',
+            label: 'API',
+          },
           {to: '/blog', label: 'Blog', position: 'left'},
           {
             href: 'https://github.com/facebook/docusaurus',
