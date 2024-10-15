@@ -118,22 +118,9 @@ configs: {"contentTypes":["newsReports","tenderDocuments","surveyReports","proce
 
 fetch("https://okf-be-prod-dot-ok-framework.el.r.appspot.com/api/discovery/getData?configs=%7B%22contentTypes%22:[%22newsReports%22,%22tenderDocuments%22,%22surveyReports%22,%22proceedings%22,%22caseReports%22,%22guidelines%22],%22findQuery%22:%7B%22kp_published_status%22:%22published%22%7D,%22queryOptions%22:%7B%7D,%22useCountDAL%22:true,%22activeLang%22:%22en%22%7D", {
   "headers": {
-    "accept": "application/json, text/plain, */*",
-    "accept-language": "en-US,en;q=0.9",
-    "if-none-match": "W/\"59-vM6Xrvxmg2ArhdjgakEMr1neocc\"",
-    "priority": "u=1, i",
-    "sec-ch-ua": "\"Google Chrome\";v=\"129\", \"Not=A?Brand\";v=\"8\", \"Chromium\";v=\"129\"",
-    "sec-ch-ua-mobile": "?0",
-    "sec-ch-ua-platform": "\"Windows\"",
-    "sec-fetch-dest": "empty",
-    "sec-fetch-mode": "cors",
-    "sec-fetch-site": "cross-site",
     "tenant": "ved",
     "x-auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1lhMzAzMDgwZjU4ODM1In0sImlhdCI6MTcyODY0MTQwMCwiZXhwIjoxNzM3MjgxNDAwfQ._pMZLXvqcJQb7R1u-UheGFZORe1ByBMfgBjUrK6lyb4",
-    "Referer": "https://ved-staging.ooloilabs.in/",
-    "Referrer-Policy": "strict-origin-when-cross-origin"
   },
-  "body": null,
   "method": "GET"
 });
 
@@ -172,16 +159,9 @@ configs: {"contentTypes":["states"],"findQuery":{"kp_published_status":"publishe
 
 fetch("https://okf-be-prod-dot-ok-framework.el.r.appspot.com/api/discovery/getData?configs=%7B%22contentTypes%22:[%22states%22],%22findQuery%22:%7B%22kp_published_status%22:%22published%22,%22$or%22:[%7B%22taggedResources.newsReports.data.0%22:%7B%22$exists%22:true%7D%7D]%7D,%22queryOptions%22:%7B%22enabled%22:true%7D,%22activeLang%22:%22en%22%7D", {
   "headers": {
-    "accept": "application/json, text/plain, */*",
-    "sec-ch-ua": "\"Google Chrome\";v=\"129\", \"Not=A?Brand\";v=\"8\", \"Chromium\";v=\"129\"",
-    "sec-ch-ua-mobile": "?0",
-    "sec-ch-ua-platform": "\"Windows\"",
     "tenant": "ved",
     "x-auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1TlhMzAzMDgwZjU4ODM1In0sImlhdCI6MTcyODY0MTQwMCwiZXhwIjoxNzM3MjgxNDAwfQ._pMZLXvqcJQb7R1u-UheGFZORe1ByBMfgBjUrK6lyb4",
-    "Referer": "https://ved-staging.ooloilabs.in/",
-    "Referrer-Policy": "strict-origin-when-cross-origin"
   },
-  "body": null,
   "method": "GET"
 });
 ```
@@ -193,21 +173,9 @@ configs: {"contentTypes":["caseReports"],"activeFilters":[],"activeSort":{"kp_da
 
 fetch("https://okf-be-prod-dot-ok-framework.el.r.appspot.com/api/discovery/getData?configs=%7B%22contentTypes%22:[%22caseReports%22],%22activeFilters%22:[],%22activeSort%22:%7B%22kp_date_published%22:-1%7D,%22searchTerm%22:%22%22,%22population%22:[%7B%22path%22:%22meta.kp_contributed_by%22,%22model%22:%22user%22,%22select%22:[%22name%22,%22avatar%22]%7D],%22findQuery%22:%7B%22kp_published_status%22:%22published%22%7D,%22lookupConfig%22:[%7B%22$lookup%22:%7B%22from%22:%22users%22,%22localField%22:%22meta.kp_contributed_by%22,%22foreignField%22:%22_id%22,%22as%22:%22meta.kp_contributed_by%22,%22pipeline%22:[%7B%22$project%22:%7B%22name%22:1,%22avatar%22:1%7D%7D]%7D%7D,%7B%22$unwind%22:%7B%22path%22:%22$meta.kp_contributed_by%22,%22preserveNullAndEmptyArrays%22:true%7D%7D],%22ksConfig%22:%22%22,%22useAggregation%22:true,%22activeLang%22:%22en%22,%22skip%22:0%7D", {
   "headers": {
-    "accept": "application/json, text/plain, */*",
-    "accept-language": "en-US,en;q=0.9",
-    "priority": "u=1, i",
-    "sec-ch-ua": "\"Google Chrome\";v=\"129\", \"Not=A?Brand\";v=\"8\", \"Chromium\";v=\"129\"",
-    "sec-ch-ua-mobile": "?0",
-    "sec-ch-ua-platform": "\"Windows\"",
-    "sec-fetch-dest": "empty",
-    "sec-fetch-mode": "cors",
-    "sec-fetch-site": "cross-site",
     "tenant": "ved",
     "x-auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1hMzAzMDgwZjU4ODM1In0sImlhdCI6MTcyODY0MTQwMCwiZXhwIjoxNzM3MjgxNDAwfQ._pMZLXvqcJQb7R1u-UheGFZORe1ByBMfgBjUrK6lyb4",
-    "Referer": "https://ved-staging.ooloilabs.in/",
-    "Referrer-Policy": "strict-origin-when-cross-origin"
-  },
-  "body": null,
+    },
   "method": "GET"
 });
 
@@ -220,21 +188,9 @@ configs: {"contentTypes":["caseReports"],"activeFilters":[],"activeSort":{"kp_da
 
 fetch("https://okf-be-prod-dot-ok-framework.el.r.appspot.com/api/discovery/getData?configs=%7B%22contentTypes%22:[%22caseReports%22],%22activeFilters%22:[],%22activeSort%22:%7B%22kp_date_published%22:-1%7D,%22searchTerm%22:%22patna%22,%22population%22:[%7B%22path%22:%22meta.kp_contributed_by%22,%22model%22:%22user%22,%22select%22:[%22name%22,%22avatar%22]%7D],%22findQuery%22:%7B%7D,%22lookupConfig%22:[%7B%22$lookup%22:%7B%22from%22:%22users%22,%22localField%22:%22meta.kp_contributed_by%22,%22foreignField%22:%22_id%22,%22as%22:%22meta.kp_contributed_by%22,%22pipeline%22:[%7B%22$project%22:%7B%22name%22:1,%22avatar%22:1%7D%7D]%7D%7D,%7B%22$unwind%22:%7B%22path%22:%22$meta.kp_contributed_by%22,%22preserveNullAndEmptyArrays%22:true%7D%7D],%22ksConfig%22:%7B%22query%22:%7B%22bool%22:%7B%22must%22:[%7B%22multi_match%22:%7B%22fields%22:[%22main.subtitle.autoComplete%22,%22main.title.autoComplete%22],%22query%22:%22patna%22,%22analyzer%22:%22standard%22%7D%7D],%22filter%22:[]%7D%7D,%22sort%22:[%7B%22kp_date_published%22:%7B%22order%22:%22desc%22%7D%7D]%7D,%22useAggregation%22:true,%22activeLang%22:%22en%22,%22skip%22:0%7D", {
   "headers": {
-    "accept": "application/json, text/plain, */*",
-    "accept-language": "en-US,en;q=0.9",
-    "priority": "u=1, i",
-    "sec-ch-ua": "\"Google Chrome\";v=\"129\", \"Not=A?Brand\";v=\"8\", \"Chromium\";v=\"129\"",
-    "sec-ch-ua-mobile": "?0",
-    "sec-ch-ua-platform": "\"Windows\"",
-    "sec-fetch-dest": "empty",
-    "sec-fetch-mode": "cors",
-    "sec-fetch-site": "cross-site",
     "tenant": "ved",
     "x-auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJgwZjU4ODM1In0sImlhdCI6MTcyODY0MTQwMCwiZXhwIjoxNzM3MjgxNDAwfQ._pMZLXvqcJQb7R1u-UheGFZORe1ByBMfgBjUrK6lyb4",
-    "Referer": "https://ved-staging.ooloilabs.in/",
-    "Referrer-Policy": "strict-origin-when-cross-origin"
   },
-  "body": null,
   "method": "GET"
 });
 ```
