@@ -16,7 +16,7 @@ The `GET /api/discovery/getData` API endpoint retrieves discovery data based on 
 
 ## Endpoint
 
-GET https://okf-be-staging-dot-ok-framework.el.r.appspot.com/api/discovery/getData
+GET https://okf-be-prod-dot-ok-framework.el.r.appspot.com/api/discovery/getData
 
 ## Request
 
@@ -35,130 +35,108 @@ GET https://okf-be-staging-dot-ok-framework.el.r.appspot.com/api/discovery/getDa
 
 ### Configs Keys Description
 
-| Header                             | Type    | Required | Description                                                                                                                                              |
-| ---------------------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `contentTypes`                     | Array   | Yes       | The types of content to be retrieved.                                                                                                                    |
-| `profileTypes`                     | Array   | No       | The types of profiles to be retrieved.                                                                                                                   |
-| `activeFilters`                    | Object  | No       | Active filters applied to the query.                                                                                                                     |
-| `activeSort`                       | Object  | No       | Sorting options for the retrieved data.                                                                                                                  |
-| `searchTerm`                       | String  | No       | The search term used to filter results.                                                                                                                  |
-| `facet`                            | Object  | No       | Facet configuration for filtering data. Read more: https://www.mongodb.com/docs/v6.1/reference/operator/aggregation/facet/                               |
-| `population`                       | Boolean | No       | Flag to indicate whether to populate related data.                                                                                                       |
-| `projection`                       | Object  | No       | Specifies the fields to include or exclude from the result set.                                                                                          |
-| `findQuery`                        | Object  | No       | The query object used to retrieve data.                                                                                                                  |
-| `populateTaggedResources`          | Boolean | No       | Indicates whether to populate resources tagged in the response.                                                                                          |
-| `lookupConfig`                     | Object  | No       | Configuration object for performing lookups on external resources. Read more: https://www.mongodb.com/docs/manual/reference/operator/aggregation/lookup/ |
-| `limit`                            | Number  | No       | The maximum number of records to retrieve.                                                                                                               |
-| `skip`                             | Number  | No       | The number of records to skip before starting to retrieve results.                                                                                       |
-| `countData`                        | Boolean | No       | Flag to indicate if the response should include the count of retrieved data.                                                                             |
-| `ksConfig`                         | Object  | No       | Configuration settings related to keyword search.                                                                                                        |
-| `combineFields`                    | Boolean | No       | Flag to combine multiple fields during the query.                                                                                                        |
-| `taggedResourcesCount`             | Array   | No       | Indicates whether to count tagged resources in the response.                                                                                             |
-| `taggedResourcesCount_unoptimized` | Array   | No       | Indicates whether to count tagged resources without optimization.                                                                                        |
-| `useAggregation`                   | Boolean | No       | Specifies if aggregation queries should be used for counting.                                                                                            |
-| `useCountDAL`                      | Boolean | No       | Indicates if a Data Access Layer should be used for counting.                                                                                            |
-| `env`                              | String  | No       | Environment context for the request (e.g., "prod", "dev", "staging").                                                                                    |
-| `pluginId`                         | String  | No       | Identifier for the plugin making the request.                                                                                                            |
-| `activeLang`                       | String  | No       | Specifies the active language for the response.                                                                                                          |
-| `countDataViaAggregate`            | Boolean | No       | Flag to indicate if the count should be done using an aggregate function.                                                                                |
+| Header                    | Type           | Required | Description                                                                                                                                                                                                                                             |
+| ------------------------- | -------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `contentTypes`            | Array          | Yes      | The types of content to be retrieved.                                                                                                                                                                                                                   |
+| `profileTypes`            | Array          | No       | The types of profiles to be retrieved.                                                                                                                                                                                                                  |
+| `activeFilters`           | Object         | No       | Active filters applied to the query.                                                                                                                                                                                                                    |
+| `activeSort`              | Object         | No       | Sorting options for the retrieved data. It is similar to mongodb sort. Read more: https://www.mongodb.com/docs/manual/reference/operator/aggregation/sort/                                                                                              |
+| `searchTerm`              | String         | No       | The search term used to filter results.                                                                                                                                                                                                                 |
+| `facet`                   | Object         | No       | Facet configuration for filtering data. Read more: https://www.mongodb.com/docs/v6.1/reference/operator/aggregation/facet/                                                                                                                              |
+| `population`              | Object         | No       | Flag to indicate whether to populate related data.                                                                                                                                                                                                      |
+| `projection`              | Object         | No       | Specifies the fields to include or exclude from the result set.                                                                                                                                                                                         |
+| `findQuery`               | Object         | No       | The query object used to retrieve data.                                                                                                                                                                                                                 |
+| `populateTaggedResources` | Boolean        | No       | Indicates whether to populate the \_ids within the taggedResources property                                                                                                                                                                             |
+| `lookupConfig`            | Object         | No       | Configuration object for performing lookups on external resources. Read more: https://www.mongodb.com/docs/manual/reference/operator/aggregation/lookup/                                                                                                |
+| `limit`                   | Number         | No       | The maximum number of records to retrieve.                                                                                                                                                                                                              |
+| `skip`                    | Number         | No       | The number of records to skip before starting to retrieve results.                                                                                                                                                                                      |
+| `countData`               | Boolean        | No       | Flag to indicate if the response should include the count of retrieved data.                                                                                                                                                                            |
+| `ksConfig`                | Object         | No       | Configuration settings related to keyword search.                                                                                                                                                                                                       |
+| `combineFields`           | Boolean        | No       | Flag to combine multiple fields during the query.                                                                                                                                                                                                       |
+| `taggedResourcesCount`    | Array          | No       | Indicates whether to count tagged resources in the response.                                                                                                                                                                                            |
+| `useAggregation`          | Boolean/Object | No       | Specifies if aggregation queries should be used for counting.                                                                                                                                                                                           |
+| `useCountDAL`             | Boolean        | No       | Indicates if a Data Access Layer should be used for counting.                                                                                                                                                                                           |
+| `pluginId`                | String         | No       | If you choose to run a post processing on the data after it is retrieved from the DB, and a plugin for the same exists in the code, then you can use the plugId id property to run it.                                                                  |
+| `activeLang`              | String         | No       | If autotranslate is enabled on this particular tenant, then you can use the activeLang property to fetch the data in that particular language. Node that, language codes should should be ISO 639, and it should be supported on this particular tenant |
+| `countDataViaAggregate`   | Boolean        | No       | Flag to indicate if the count should be done using an aggregate function.                                                                                                                                                                               |
 
-# There are 4 types of data access methods:
+### Query Parameters for countdata
 
-## countdata (simply returns the count of documents)
+- `useCountDal`
+- `contentType/profileTypes`
+- `findQuery`
+- `limit`
+- `skip`
+- `facet`
 
-This type of query is done to get the count of documents meeting specific conditions
+### Query Parameters for findData
 
-### Query Parameters speciic to this
+- `contentType / profileTypes`
+- `findQuery`
+- `activeSort`
+- `population`
+- `projection`
+- `populateTaggedResources`
+- `limit`
+- `skip`
+- `countData`
 
-| Header                       | Type    | Required | Description                                                                                                                |
-| ---------------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `useCountDal`                | Boolean | Yes      | A flag indicating whether to use useCountDal methods in the query. Its value will be `true` in this case.                  |
-| `contentType / profileTypes` | Array   | Yes       | The type(s) of content or profiles to be retrieved, mutually exclusive.                                                    |
-| `findQuery`                  | Object  | No       | The query object used to retrieve data.                                                                                    |
-| `limit`                      | Number  | No       | The maximum number of records to retrieve.                                                                                 |
-| `skip`                       | Number  | No       | The number of records to skip before starting to retrieve results.                                                         |
-| `facet`                      | Object  | No       | Facet configuration for filtering data. Read more: https://www.mongodb.com/docs/v6.1/reference/operator/aggregation/facet/ |
-| `env`                        | String  | No       | Environment context for the request (e.g., "prod", "dev", "staging").                                                      |
+### Query Parameters for aggregateData
 
-## findData (uses mongodb .find()) //projection
-
-`useCountDAL, useAggregation, searchTerm should be either falsy or undefined`
-
-### Query Parameters
-
-| Header                       | Type    | Required | Description                                                                  |
-| ---------------------------- | ------- | -------- | ---------------------------------------------------------------------------- |
-| `contentType / profileTypes` | Array   | Yes       | The type(s) of content or profiles to be retrieved, mutually exclusive.      |
-| `findQuery`                  | Object  | No       | The query object used to retrieve data.                                      |
-| `activeSort`                 | Object  | No       | Sorting options for the retrieved data.                                      |
-| `population`                 | Boolean | No       | Flag to indicate whether to populate related data.                           |
-| `projection`                 | Object  | No       | Specifies the fields to include or exclude from the result set.              |
-| `populateTaggedResources`    | Boolean | No       | Indicates whether to populate resources tagged in the response.              |
-| `limit`                      | Number  | No       | The maximum number of records to retrieve.                                   |
-| `skip`                       | Number  | No       | The number of records to skip before starting to retrieve results.           |
-| `tenant`                     | String  | Yes      | Identifier for the tenant making the request.                                |
-| `countData`                  | Boolean | No       | Flag to indicate if the response should include the count of retrieved data. |
-
-## aggregateData (uses aggregation pipeline) //lookup
-
-### Query Parameters
-
-| Header                             | Type    | Required | Description                                                                                                                                              |
-| ---------------------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `useAggregation`                   | Boolean | Yes       | Specifies if aggregation queries should be used for counting.                                                                                            |
-| `contentType / profileTypes`       | Array   | Yes       | The type(s) of content or profiles to be retrieved, mutually exclusive.                                                                                  |
-| `findQuery`                        | Object  | No       | The query object used to retrieve data.                                                                                                                  |
-| `activeSort`                       | Object  | No       | Sorting options for the retrieved data.                                                                                                                  |
-| `facet`                            | Object  | No       | Facet configuration for filtering data. Read more: https://www.mongodb.com/docs/v6.1/reference/operator/aggregation/facet/                               |
-| `projection`                       | Object  | No       | Specifies the fields to include or exclude from the result set.                                                                                          |
-| `populateTaggedResources`          | Boolean | No       | Indicates whether to populate resources tagged in the response.                                                                                          |
-| `lookupConfig`                     | Object  | No       | Configuration object for performing lookups on external resources. Read more: https://www.mongodb.com/docs/manual/reference/operator/aggregation/lookup/ |
-| `limit`                            | Number  | No       | The maximum number of records to retrieve.                                                                                                               |
-| `skip`                             | Number  | No       | The number of records to skip before starting to retrieve results.                                                                                       |
-| `tenant`                           | String  | Yes      | Identifier for the tenant making the request.                                                                                                            |
-| `taggedResourcesCount`             | Array   | No       | Indicates whether to count tagged resources in the response.                                                                                             |
-| `taggedResourcesCount_unoptimized` | Array   | No       | Indicates whether to count tagged resources without optimization.                                                                                        |
-| `combineFields`                    | Boolean | No       | Flag to combine multiple fields during the query.                                                                                                        |
-| `countData`                        | Boolean | No       | Flag to indicate if the response should include the count of retrieved data.                                                                             |
-| `countDataViaAggregate`            | Boolean | No       | Flag to indicate if the count should be done using an aggregate function.                                                                                |
+- `useAggregation`
+- `contentType / profileTypes`
+- `findQuery`
+- `activeSort`
+- `facet`
+- `projection`
+- `populateTaggedResources`
+- `lookupConfig`
+- `limit`
+- `skip`
+- `taggedResourcesCount`
+- `combineFields`
+- `countData`
+- `countDataViaAggregate`
 
 ## elasticSearch
 
-useCountDal should be false and searcg
-
-| Header                                                    | Type    | Required | Description                                                                |
-| --------------------------------------------------------- | ------- | -------- | -------------------------------------------------------------------------- |
-| `contentType / profileTypes`                              | Array   | Yes       | The type(s) of content or profiles to be retrieved, mutually exclusive.    |
-| `searchTerm`                                              | String  | Yes       | The search term used to filter results.                                    |
-| `useCountDAL`                                             | Boolean | No       | Should be `false`.                                                         |
-| `ksConfig`                                                | Object  | No       | Configuration settings related to keyword search.                          |
-| `tenant`                                                  | String  | Yes      | Identifier for the tenant making the request.                              |
-| `skip`                                                    | Number  | No       | The number of records to skip before starting to retrieve results.         |
-| `limit`                                                   | Number  | No       | The maximum number of records to retrieve.                                 |
-| `findQuery`                                               | Object  | No       | The query object used to retrieve data.                                    |
-| `taggedResourcesCount / taggedResourcesCount_unoptimized` | Array   | No       | Indicates whether to count tagged resources, with or without optimization. |
+- `contentType / profileTypes`
+- `searchTerm`
+- `useCountDAL`
+- `ksConfig`
+- `skip`
+- `limit`
+- `findQuery`
+- `taggedResourcesCount`
 
 # Sample Request
 
 ## countdata
 
 ```
-curl 'https://okf-be-staging-dot-ok-framework.el.r.appspot.com/api/discovery/getData?configs=%7B%22contentTypes%22:\[%22newsReports%22,%22tenderDocuments%22,%22surveyReports%22,%22proceedings%22,%22caseReports%22,%22guidelines%22\],%22findQuery%22:%7B%22kp_published_status%22:%22published%22%7D,%22queryOptions%22:%7B%7D,%22useCountDAL%22:true,%22activeLang%22:%22en%22%7D' \
-  -H 'accept: application/json, text/plain, */*' \
-  -H 'accept-language: en-US,en;q=0.9' \
-  -H 'if-none-match: W/"59-adn5p9Ibizthsb5IsLwZzO88TUw"' \
-  -H 'origin: https://ved-staging.ooloilabs.in' \
-  -H 'priority: u=1, i' \
-  -H 'referer: https://ved-staging.ooloilabs.in/' \
-  -H 'sec-ch-ua: "Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"' \
-  -H 'sec-ch-ua-mobile: ?0' \
-  -H 'sec-ch-ua-platform: "Windows"' \
-  -H 'sec-fetch-dest: empty' \
-  -H 'sec-fetch-mode: cors' \
-  -H 'sec-fetch-site: cross-site' \
-  -H 'tenant: ved' \
-  -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36' \
-  -H 'x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoimRjZTlhMzAzMDgwZjU4ODM1In0sImlhdCI6MTcyNzkzODAwOCwiZXhwIjoxNzM2NTc4MDA4fQ.5Sqbmyi30cWLRwBfzUS7oF12i2BvNTwdY'
+configs: {"contentTypes":["newsReports","tenderDocuments","surveyReports","proceedings","caseReports","guidelines"],"findQuery":{"kp_published_status":"published"},"queryOptions":{},"useCountDAL":true,"activeLang":"en"}
+
+fetch("https://okf-be-prod-dot-ok-framework.el.r.appspot.com/api/discovery/getData?configs=%7B%22contentTypes%22:[%22newsReports%22,%22tenderDocuments%22,%22surveyReports%22,%22proceedings%22,%22caseReports%22,%22guidelines%22],%22findQuery%22:%7B%22kp_published_status%22:%22published%22%7D,%22queryOptions%22:%7B%7D,%22useCountDAL%22:true,%22activeLang%22:%22en%22%7D", {
+  "headers": {
+    "accept": "application/json, text/plain, */*",
+    "accept-language": "en-US,en;q=0.9",
+    "if-none-match": "W/\"59-vM6Xrvxmg2ArhdjgakEMr1neocc\"",
+    "priority": "u=1, i",
+    "sec-ch-ua": "\"Google Chrome\";v=\"129\", \"Not=A?Brand\";v=\"8\", \"Chromium\";v=\"129\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "cross-site",
+    "tenant": "ved",
+    "x-auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1lhMzAzMDgwZjU4ODM1In0sImlhdCI6MTcyODY0MTQwMCwiZXhwIjoxNzM3MjgxNDAwfQ._pMZLXvqcJQb7R1u-UheGFZORe1ByBMfgBjUrK6lyb4",
+    "Referer": "https://ved-staging.ooloilabs.in/",
+    "Referrer-Policy": "strict-origin-when-cross-origin"
+  },
+  "body": null,
+  "method": "GET"
+});
+
 ```
 
 ### Response
@@ -190,66 +168,75 @@ curl 'https://okf-be-staging-dot-ok-framework.el.r.appspot.com/api/discovery/get
 ## findData
 
 ```
+configs: {"contentTypes":["states"],"findQuery":{"kp_published_status":"published","$or":[{"taggedResources.newsReports.data.0":{"$exists":true}}]},"queryOptions":{"enabled":true},"activeLang":"en"}
 
-curl 'https://okf-be-staging-dot-ok-framework.el.r.appspot.com/api/discovery/getData?configs=%7B%22contentTypes%22:\[%22districts%22\],%22findQuery%22:%7B%22kp_published_status%22:%22published%22,%22$or%22:\[%7B%22taggedResources.caseReports.data.0%22:%7B%22$exists%22:true%7D%7D\],%22tags.states.data._id%22:%7B%22$in%22:\[%2263244f6d5e5676e7181365b5%22\]%7D%7D,%22queryOptions%22:%7B%22enabled%22:true%7D,%22activeLang%22:%22en%22%7D' \
-  -H 'accept: application/json, text/plain, */*' \
-  -H 'accept-language: en-US,en;q=0.9' \
-  -H 'if-none-match: W/"1cc4-zZw4W0n5Ltmc/5EXA0Bzw3pAMjs"' \
-  -H 'origin: https://ved-staging.ooloilabs.in' \
-  -H 'priority: u=1, i' \
-  -H 'referer: https://ved-staging.ooloilabs.in/' \
-  -H 'sec-ch-ua: "Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"' \
-  -H 'sec-ch-ua-mobile: ?0' \
-  -H 'sec-ch-ua-platform: "Windows"' \
-  -H 'sec-fetch-dest: empty' \
-  -H 'sec-fetch-mode: cors' \
-  -H 'sec-fetch-site: cross-site' \
-  -H 'tenant: ved' \
-  -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36' \
-  -H 'x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7dCI6MTcyNzkzODAwOCwiZXhwIjoxNzM2NTc4MDA4fQ.5SqbmyTwdY'
-
+fetch("https://okf-be-prod-dot-ok-framework.el.r.appspot.com/api/discovery/getData?configs=%7B%22contentTypes%22:[%22states%22],%22findQuery%22:%7B%22kp_published_status%22:%22published%22,%22$or%22:[%7B%22taggedResources.newsReports.data.0%22:%7B%22$exists%22:true%7D%7D]%7D,%22queryOptions%22:%7B%22enabled%22:true%7D,%22activeLang%22:%22en%22%7D", {
+  "headers": {
+    "accept": "application/json, text/plain, */*",
+    "sec-ch-ua": "\"Google Chrome\";v=\"129\", \"Not=A?Brand\";v=\"8\", \"Chromium\";v=\"129\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "tenant": "ved",
+    "x-auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1TlhMzAzMDgwZjU4ODM1In0sImlhdCI6MTcyODY0MTQwMCwiZXhwIjoxNzM3MjgxNDAwfQ._pMZLXvqcJQb7R1u-UheGFZORe1ByBMfgBjUrK6lyb4",
+    "Referer": "https://ved-staging.ooloilabs.in/",
+    "Referrer-Policy": "strict-origin-when-cross-origin"
+  },
+  "body": null,
+  "method": "GET"
+});
 ```
 
 ## useAggregation
 
 ```
-curl 'https://okf-be-staging-dot-ok-framework.el.r.appspot.com/api/discovery/getData?configs=%7B%22contentTypes%22:\[%22caseReports%22\],%22activeFilters%22:\[\],%22activeSort%22:%7B%22kp_date_published%22:-1%7D,%22searchTerm%22:%22%22,%22population%22:\[%7B%22path%22:%22meta.kp_contributed_by%22,%22model%22:%22user%22,%22select%22:\[%22name%22,%22avatar%22\]%7D\],%22findQuery%22:%7B%22kp_published_status%22:%22published%22%7D,%22lookupConfig%22:\[%7B%22$lookup%22:%7B%22from%22:%22users%22,%22localField%22:%22meta.kp_contributed_by%22,%22foreignField%22:%22_id%22,%22as%22:%22meta.kp_contributed_by%22,%22pipeline%22:\[%7B%22$project%22:%7B%22name%22:1,%22avatar%22:1%7D%7D\]%7D%7D,%7B%22$unwind%22:%7B%22path%22:%22$meta.kp_contributed_by%22,%22preserveNullAndEmptyArrays%22:true%7D%7D\],%22ksConfig%22:%22%22,%22useAggregation%22:true,%22activeLang%22:%22en%22,%22skip%22:0%7D' \
-  -H 'accept: application/json, text/plain, */*' \
-  -H 'accept-language: en-US,en;q=0.9' \
-  -H 'if-none-match: W/"9b82-83J7ThxuRwwFnwsBy3w50JzhdoQ"' \
-  -H 'origin: https://ved-staging.ooloilabs.in' \
-  -H 'priority: u=1, i' \
-  -H 'referer: https://ved-staging.ooloilabs.in/' \
-  -H 'sec-ch-ua: "Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"' \
-  -H 'sec-ch-ua-mobile: ?0' \
-  -H 'sec-ch-ua-platform: "Windows"' \
-  -H 'sec-fetch-dest: empty' \
-  -H 'sec-fetch-mode: cors' \
-  -H 'sec-fetch-site: cross-site' \
-  -H 'tenant: ved' \
-  -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36' \
-  -H 'x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZjZGEZjU4ODM1In0sImlhdCI6MTcyNzkzODAwOCwiZXhwIjoxNzM2NTc4MDA4fQ.5Sqbmyi9WRXJ16hQl30cWLRwBfzUS7BvNTwdY'
+configs: {"contentTypes":["caseReports"],"activeFilters":[],"activeSort":{"kp_date_published":-1},"searchTerm":"","population":[{"path":"meta.kp_contributed_by","model":"user","select":["name","avatar"]}],"findQuery":{"kp_published_status":"published"},"lookupConfig":[{"$lookup":{"from":"users","localField":"meta.kp_contributed_by","foreignField":"_id","as":"meta.kp_contributed_by","pipeline":[{"$project":{"name":1,"avatar":1}}]}},{"$unwind":{"path":"$meta.kp_contributed_by","preserveNullAndEmptyArrays":true}}],"ksConfig":"","useAggregation":true,"activeLang":"en","skip":0}
+
+fetch("https://okf-be-prod-dot-ok-framework.el.r.appspot.com/api/discovery/getData?configs=%7B%22contentTypes%22:[%22caseReports%22],%22activeFilters%22:[],%22activeSort%22:%7B%22kp_date_published%22:-1%7D,%22searchTerm%22:%22%22,%22population%22:[%7B%22path%22:%22meta.kp_contributed_by%22,%22model%22:%22user%22,%22select%22:[%22name%22,%22avatar%22]%7D],%22findQuery%22:%7B%22kp_published_status%22:%22published%22%7D,%22lookupConfig%22:[%7B%22$lookup%22:%7B%22from%22:%22users%22,%22localField%22:%22meta.kp_contributed_by%22,%22foreignField%22:%22_id%22,%22as%22:%22meta.kp_contributed_by%22,%22pipeline%22:[%7B%22$project%22:%7B%22name%22:1,%22avatar%22:1%7D%7D]%7D%7D,%7B%22$unwind%22:%7B%22path%22:%22$meta.kp_contributed_by%22,%22preserveNullAndEmptyArrays%22:true%7D%7D],%22ksConfig%22:%22%22,%22useAggregation%22:true,%22activeLang%22:%22en%22,%22skip%22:0%7D", {
+  "headers": {
+    "accept": "application/json, text/plain, */*",
+    "accept-language": "en-US,en;q=0.9",
+    "priority": "u=1, i",
+    "sec-ch-ua": "\"Google Chrome\";v=\"129\", \"Not=A?Brand\";v=\"8\", \"Chromium\";v=\"129\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "cross-site",
+    "tenant": "ved",
+    "x-auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1hMzAzMDgwZjU4ODM1In0sImlhdCI6MTcyODY0MTQwMCwiZXhwIjoxNzM3MjgxNDAwfQ._pMZLXvqcJQb7R1u-UheGFZORe1ByBMfgBjUrK6lyb4",
+    "Referer": "https://ved-staging.ooloilabs.in/",
+    "Referrer-Policy": "strict-origin-when-cross-origin"
+  },
+  "body": null,
+  "method": "GET"
+});
 
 ```
 
 ## elastic search
 
 ```
-curl 'https://okf-be-staging-dot-ok-framework.el.r.appspot.com/api/discovery/getData?configs=%7B%22contentTypes%22:\[%22caseReports%22\],%22activeFilters%22:\[\],%22activeSort%22:%7B%22kp_date_published%22:-1%7D,%22searchTerm%22:%22dee%22,%22population%22:\[%7B%22path%22:%22meta.kp_contributed_by%22,%22model%22:%22user%22,%22select%22:\[%22name%22,%22avatar%22\]%7D\],%22findQuery%22:%7B%7D,%22lookupConfig%22:\[%7B%22$lookup%22:%7B%22from%22:%22users%22,%22localField%22:%22meta.kp_contributed_by%22,%22foreignField%22:%22_id%22,%22as%22:%22meta.kp_contributed_by%22,%22pipeline%22:\[%7B%22$project%22:%7B%22name%22:1,%22avatar%22:1%7D%7D\]%7D%7D,%7B%22$unwind%22:%7B%22path%22:%22$meta.kp_contributed_by%22,%22preserveNullAndEmptyArrays%22:true%7D%7D\],%22ksConfig%22:%7B%22query%22:%7B%22bool%22:%7B%22must%22:\[%7B%22multi_match%22:%7B%22fields%22:\[%22main.subtitle.autoComplete%22,%22main.title.autoComplete%22\],%22query%22:%22dee%22,%22analyzer%22:%22standard%22%7D%7D\],%22filter%22:\[\]%7D%7D,%22sort%22:\[%7B%22kp_date_published%22:%7B%22order%22:%22desc%22%7D%7D\]%7D,%22useAggregation%22:true,%22activeLang%22:%22en%22,%22skip%22:0%7D' \
-  -H 'accept: application/json, text/plain, */*' \
-  -H 'accept-language: en-US,en;q=0.9' \
-  -H 'origin: https://ved-staging.ooloilabs.in' \
-  -H 'priority: u=1, i' \
-  -H 'referer: https://ved-staging.ooloilabs.in/' \
-  -H 'sec-ch-ua: "Google Chrome";v="129", "Not=A?Brand";v="8", "Chromium";v="129"' \
-  -H 'sec-ch-ua-mobile: ?0' \
-  -H 'sec-ch-ua-platform: "Windows"' \
-  -H 'sec-fetch-dest: empty' \
-  -H 'sec-fetch-mode: cors' \
-  -H 'sec-fetch-site: cross-site' \
-  -H 'tenant: ved' \
-  -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36' \
-  -H 'x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZjZGE1ZmRjZTlhMzAzMDgwZjU4ODM1In0sImlhdCI6MTcyODY0MTQwMCwiZXhwIjoxNzM3MjgxNDAwfQ._pMZLXvqcJQb7R1u-UheGFZORe1ByBMfgBjUrK6lyb4'
+configs: {"contentTypes":["caseReports"],"activeFilters":[],"activeSort":{"kp_date_published":-1},"searchTerm":"patna","population":[{"path":"meta.kp_contributed_by","model":"user","select":["name","avatar"]}],"findQuery":{},"lookupConfig":[{"$lookup":{"from":"users","localField":"meta.kp_contributed_by","foreignField":"_id","as":"meta.kp_contributed_by","pipeline":[{"$project":{"name":1,"avatar":1}}]}},{"$unwind":{"path":"$meta.kp_contributed_by","preserveNullAndEmptyArrays":true}}],"ksConfig":{"query":{"bool":{"must":[{"multi_match":{"fields":["main.subtitle.autoComplete","main.title.autoComplete"],"query":"patna","analyzer":"standard"}}],"filter":[]}},"sort":[{"kp_date_published":{"order":"desc"}}]},"useAggregation":true,"activeLang":"en","skip":0}
+
+fetch("https://okf-be-prod-dot-ok-framework.el.r.appspot.com/api/discovery/getData?configs=%7B%22contentTypes%22:[%22caseReports%22],%22activeFilters%22:[],%22activeSort%22:%7B%22kp_date_published%22:-1%7D,%22searchTerm%22:%22patna%22,%22population%22:[%7B%22path%22:%22meta.kp_contributed_by%22,%22model%22:%22user%22,%22select%22:[%22name%22,%22avatar%22]%7D],%22findQuery%22:%7B%7D,%22lookupConfig%22:[%7B%22$lookup%22:%7B%22from%22:%22users%22,%22localField%22:%22meta.kp_contributed_by%22,%22foreignField%22:%22_id%22,%22as%22:%22meta.kp_contributed_by%22,%22pipeline%22:[%7B%22$project%22:%7B%22name%22:1,%22avatar%22:1%7D%7D]%7D%7D,%7B%22$unwind%22:%7B%22path%22:%22$meta.kp_contributed_by%22,%22preserveNullAndEmptyArrays%22:true%7D%7D],%22ksConfig%22:%7B%22query%22:%7B%22bool%22:%7B%22must%22:[%7B%22multi_match%22:%7B%22fields%22:[%22main.subtitle.autoComplete%22,%22main.title.autoComplete%22],%22query%22:%22patna%22,%22analyzer%22:%22standard%22%7D%7D],%22filter%22:[]%7D%7D,%22sort%22:[%7B%22kp_date_published%22:%7B%22order%22:%22desc%22%7D%7D]%7D,%22useAggregation%22:true,%22activeLang%22:%22en%22,%22skip%22:0%7D", {
+  "headers": {
+    "accept": "application/json, text/plain, */*",
+    "accept-language": "en-US,en;q=0.9",
+    "priority": "u=1, i",
+    "sec-ch-ua": "\"Google Chrome\";v=\"129\", \"Not=A?Brand\";v=\"8\", \"Chromium\";v=\"129\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "cross-site",
+    "tenant": "ved",
+    "x-auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJgwZjU4ODM1In0sImlhdCI6MTcyODY0MTQwMCwiZXhwIjoxNzM3MjgxNDAwfQ._pMZLXvqcJQb7R1u-UheGFZORe1ByBMfgBjUrK6lyb4",
+    "Referer": "https://ved-staging.ooloilabs.in/",
+    "Referrer-Policy": "strict-origin-when-cross-origin"
+  },
+  "body": null,
+  "method": "GET"
+});
 ```
 
 <!--
