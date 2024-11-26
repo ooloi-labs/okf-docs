@@ -121,7 +121,17 @@ const sidebars = {
   ],
   apiDocSidebar: [
     'api-docs/intro',
-    'api-docs/apis/getData',
+    {
+      type: 'category',
+      label: 'Content',
+      link: {
+        type: 'generated-index',
+        description: 'Content Description',
+      },
+      items: [
+        'api-docs/apis/getData',
+      ],
+    },
   ],
 };
 

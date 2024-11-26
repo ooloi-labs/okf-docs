@@ -1,3 +1,7 @@
+---
+title: "Get Data & Filters"
+---
+
 # Api reference for GetData Endpoint:
 
 ## Overview
