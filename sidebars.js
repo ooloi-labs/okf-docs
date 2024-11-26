@@ -59,7 +59,6 @@ const sidebars = {
         'content/rich-text-editor',
         'content/batch-registration',
         'content/listing-page-component',
-        'content/pwa',
         'content/caching',
       ],
     },
