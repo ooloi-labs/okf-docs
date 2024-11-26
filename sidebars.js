@@ -103,6 +103,7 @@ const sidebars = {
         'additional-features/chatbot',
         'additional-features/llms',
         'additional-features/csv-or-data-exports',
+        'additional-features/pwa',
       ],
     },
     {
