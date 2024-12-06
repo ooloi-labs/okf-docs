@@ -52,7 +52,17 @@ const sidebars = {
         description: 'Content Description',
       },
       items: [
-        'content/content-api',
+        {
+          type: 'category',
+          label: 'Content API',
+          link: {
+            type: 'doc',
+            id: 'content/content-api/content-api',
+          },
+          items: [
+            'content/content-api/doc-status-based-action',
+          ],
+        },
         'content/review-api',
         'content/get-data-and-filters',
         'content/component-library',
