@@ -32,6 +32,10 @@ This details the various states a document can be in and the transitions between
 ```
    draft --> awaitingModeration --> underModeration --> sentBack --> draft
 ```
+   OR
+```
+   draft --> awaitingModeration --> underModeration --> awaitingModeration
+```
 
 #### Users with PUBLISH Access
 ```
