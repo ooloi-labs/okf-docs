@@ -24,7 +24,7 @@ This details the various states a document can be in and the transitions between
 
 ### 1. New Content Creation
 
-#### Standard User Flow
+#### Users with SUBMIT access
 ```
    draft --> awaitingModeration --> underModeration --> published
 ```
@@ -33,7 +33,7 @@ This details the various states a document can be in and the transitions between
    draft --> awaitingModeration --> underModeration --> sentBack --> draft
 ```
 
-#### Users with Publishing Access
+#### Users with PUBLISH Access
 ```
     draft --> published
 ```
@@ -50,7 +50,7 @@ This details the various states a document can be in and the transitions between
 
 ### 2. Editing Published Content
 
-#### Standard User Flow
+#### Users with SUBMIT access
 ```
    published --> editPublished --> awaitingModeration --> underModeration --> published
 ```
@@ -59,7 +59,7 @@ This details the various states a document can be in and the transitions between
    published --> editPublished --> awaitingModeration --> underModeration --> sentBack -->  editPublished
 ```
 
-#### Users with Publishing Access
+#### Users with PUBLISH Access
 ```
    editPublished --> published
 ```
@@ -98,6 +98,6 @@ This details the various states a document can be in and the transitions between
 
 - Content visibility is restricted based on status
 - Only published content is visible on the platform
-- Users with publishing access bypass the moderation workflow
+- Users with PUBLISH access bypass the moderation workflow
 - Sent-back content must go through the entire workflow again
 - When under moderation, published content is temporarily removed from the platform
