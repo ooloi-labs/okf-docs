@@ -1,5 +1,5 @@
 ---
-title: "Content API"
+title: "Content APIs"
 description: "Description goes here"
 sidebar_position: 1
 ---

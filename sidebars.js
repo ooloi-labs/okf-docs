@@ -61,6 +61,7 @@ const sidebars = {
           },
           items: [
             'content/content-api/doc-status-based-action',
+            'content/content-api/content-apis-overview',
           ],
         },
         'content/review-api',
