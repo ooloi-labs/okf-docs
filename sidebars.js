@@ -110,6 +110,7 @@ const sidebars = {
         },
         'additional-features/plugins',
         'additional-features/search',
+        'additional-features/autoTranslation',
         'additional-features/chatbot',
         'additional-features/llms',
         'additional-features/csv-or-data-exports',
