@@ -36,22 +36,27 @@ This section of the content APIs deals with modification, status update, metadat
 * Update Tagged Resources
 
 ### General Access Validation
-General Access Validation
+ * checks whether the user has access to the API OR a specific action
+ * Possible ACTIONS: READ, SUBMIT, PUBLISH, DELETE, UPDATE, MODERATE, READ_IF_MEMBER
+ * If the user has no access then it throws an error with the appropriate error message
+ * [see the pictorial view here](https://www.figma.com/board/Rb8AvD2z6Dwh29Fmj1e9ot/CONTENT-%26-MODERATION-MASTER?node-id=514-717&t=tCHU8BchBUATD1X2-0)
 
 ### Document Exists Check
-Document Exists Check
+ * Checks for the existence of the document and if not found it throws general_resourceNotFound error
 
 ### Check Access Against Doc Status
-Check Access Against Doc Status
+ * It checks whether the document is available for the user to perform the specific action the user try to do based on the current status of the document
 
 ### Check Authorship Rights
-Check Authorship Rights
+ * Checks whether the user is the author or the current editor based on the segment provided
+ * If the segment is collections or staticPages it checks whether the user is current editor or not
+ * If the segment is publishing then it checks whether the user is author(creator of the document) or not
 
 ### Document Status Update Framework
-Document Status Update Framework
+[see here](./doc-status-based-action.md)
 
 ### Document Metadata Update Framework
-Document Metadata Update Framework
+ * This updates general informations about the document by updating the fields like kp_published_status, kp_date_submitted, kp_date_mod_begin, "lastActivity.date", kp_date_published, kp_date_last_saved
 
 ### Clone Handling
 Clone Handling
