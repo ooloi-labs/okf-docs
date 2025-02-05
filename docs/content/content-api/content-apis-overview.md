@@ -53,7 +53,10 @@ This section of the content APIs deals with modification, status update, metadat
  * If the segment is publishing then it checks whether the user is author(creator of the document) or not
 
 ### Document Status Update Framework
-[see here](./doc-status-based-action.md)
+Document Status Update Framework updates the status of a document.
+Possible statuses are draft, awaitingModeration, underModeration, published, sentBack and editPublished.
+
+[Click here for detailed explanation](./doc-status-based-action.md)
 
 ### Document Metadata Update Framework
  * This updates general informations about the document by updating the fields like kp_published_status, kp_date_submitted, kp_date_mod_begin, "lastActivity.date", kp_date_published, kp_date_last_saved
@@ -62,10 +65,18 @@ This section of the content APIs deals with modification, status update, metadat
 Clone Handling
 
 ### Update Tagged Resources
-Update Tagged Resources
+Imagine you have two lists of items, one labeled "prev"  and the other labeled "updated". Each list has different categories, and under each category, there are tags.
+First, we check which list has more categories and use that as our main reference. Then, we go through each category and compare the tags from both lists.
+
+If a category exists in "prev" but not in "updated," it means all its tags are new additions in "updated."
+If a category exists in "updated" but not in "prev," it means all its tags have been removed in "updated."
+
+If a category exists in both lists, we compare the tags:
+* Tags that were in "prev" but are missing in "updated" are removed tags.
+* Tags that are newly added in "updated" but were not in "prev" are new additions.
 
 ### Transaction Applied
-Transaction Applied
+Represents whether MongoDB transaction applied or not. Transactions ensure multiple operations succeed or fail together, maintaining data integrity.
 
 ### Have plugins been run
-Have plugins been run
+Represents whether an API contains tenant specific logic.
