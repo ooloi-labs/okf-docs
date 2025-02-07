@@ -21,7 +21,7 @@ For a better understanding, we have divided the content APIs into two major part
 * Data Modification
 
 ## Validation/Error Handling
-This section of the content APIs deals with access validation and error handling. It checks who and under what circumstances can the data be viewed, modified or basically a specific action can be performed. Additionally, it is responsible for error handling in case of unauthorised access.
+This section of the content APIs focuses on access validation and error handling. It determines who can view or modify the data, or perform specific actions, and under what circumstances. Additionally, it handles errors in cases of unauthorized access.
 This section is divided into 4 parts:
 * General Access Validation
 * Document Exists Check
@@ -45,10 +45,10 @@ This section of the content APIs deals with modification, status update, metadat
 [Click here to see the pictorial representation](https://www.figma.com/board/Rb8AvD2z6Dwh29Fmj1e9ot/CONTENT-%26-MODERATION-MASTER?node-id=400-642&t=9M11oO67DerUbARS-0)
 
 ### Document Exists Check
- * Checks for the existence of the document and if not found it throws general_resourceNotFound error
+ * Checks for the existence of the document and if not found, it throws general_resourceNotFound error
 
 ### Check Access Against Doc Status
- * It checks whether the document is available for the user to perform the specific action the user try to do based on the current status of the document
+ * It checks whether the document is available for the user to perform the specific action they are attempting, based on the current status of the document.
 
 ### Check Authorship Rights
  * Checks whether the user is the author or the current editor based on the segment provided
@@ -103,7 +103,7 @@ If the moderator approves it:
 * Both clones are deleted.
 
 ### Update Tagged Resources
-Imagine you have two lists of items, one labeled "prev"  and the other labeled "updated". Each list has different categories, and under each category, there are tags.
+Imagine you have two lists of items, one labeled "prev" and the other labeled "updated". Each list has different categories, and under each category, there are tags.
 First, we check which list has more categories and use that as our main reference. Then, we go through each category and compare the tags from both lists.
 
 If a category exists in "prev" but not in "updated," it means all its tags are new additions in "updated."
