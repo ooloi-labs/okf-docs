@@ -9,19 +9,49 @@ sidebar_position: 8
 
 ---
 
-## Architecture Overview
+## Implementation Steps
 
 ```mermaid
 flowchart TD
-    A[Application] --> B[CacheService]
-    B --> C[Cache Store]
-    B --> D[MongoDB]
-    C -->|Redis| E[Remote Cache]
+    A[1. Initialize CacheService] --> B[2. Register Collections]
+    B --> C[3. Setup Auto-Invalidation]
+    C --> D[4. Apply Caching to Models]
+    D --> E[5. Use Models Normally]
+    E --> F[6. Manual Invalidation When Needed]
+```
+
+---
+
+## CRUD Operations + Cache
+
+```mermaid
+flowchart TD
+    A[Operation] --> B{Operation Type}
+    B -->|Create| C[Execute DB → Invalidate Cache]
+    B -->|Read| D{Cache Strategy}
+    B -->|Update| E[Execute DB → Invalidate Cache]
+    B -->|Delete| F[Execute DB → Invalidate Cache]
     
-    
-    style B fill:#f9f,stroke:#333,stroke-width:2px
-    style C fill:#bbf,stroke:#333,stroke-width:2px
-    style D fill:#bfb,stroke:#333,stroke-width:2px
+    D -->|Cache First| G[Check Cache → DB Fallback]
+    D -->|Network First| H[Try DB → Cache Fallback]
+    D -->|Stale-While-Revalidate| I[Return Cache → Refresh Background]
+```
+
+---
+
+## Write Operations Flow
+
+```mermaid
+flowchart TD
+    A[Write Operation] --> B[Execute on Database]
+    B --> C{Operation Type}
+    C -->|Create| D[Post-save Hook]
+    C -->|Update| E[Post-update Hook]
+    C -->|Delete| F[Post-delete Hook]
+    D --> G[Invalidate Collection Cache]
+    E --> H[Invalidate Collection Cache]
+    F --> I[Invalidate Collection Cache]
+    A -->|Bulk Operations| J[Manual Invalidation]
 ```
 
 ---
@@ -37,6 +67,23 @@ flowchart TD
     E --> I[Specify Operations]
     A --> J[Setup Auto-Invalidation]
     A --> K[Apply to Models]
+```
+
+---
+
+## Architecture Overview
+
+```mermaid
+flowchart TD
+    A[Application] --> B[CacheService]
+    B --> C[Cache Store]
+    B --> D[MongoDB]
+    C -->|Redis| E[Remote Cache]
+    
+    
+    style B fill:#f9f,stroke:#333,stroke-width:2px
+    style C fill:#bbf,stroke:#333,stroke-width:2px
+    style D fill:#bfb,stroke:#333,stroke-width:2px
 ```
 
 ---
@@ -80,23 +127,6 @@ flowchart TD
 
 ---
 
-## Write Operations Flow
-
-```mermaid
-flowchart TD
-    A[Write Operation] --> B[Execute on Database]
-    B --> C{Operation Type}
-    C -->|Create| D[Post-save Hook]
-    C -->|Update| E[Post-update Hook]
-    C -->|Delete| F[Post-delete Hook]
-    D --> G[Invalidate Collection Cache]
-    E --> H[Invalidate Collection Cache]
-    F --> I[Invalidate Collection Cache]
-    A -->|Bulk Operations| J[Manual Invalidation]
-```
-
----
-
 ## Cache Invalidation Process
 
 ```mermaid
@@ -111,35 +141,6 @@ flowchart TD
 ```
 
 ---
-
-## CRUD Operations + Cache Matrix
-
-```mermaid
-flowchart TD
-    A[Operation] --> B{Operation Type}
-    B -->|Create| C[Execute DB → Invalidate Cache]
-    B -->|Read| D{Cache Strategy}
-    B -->|Update| E[Execute DB → Invalidate Cache]
-    B -->|Delete| F[Execute DB → Invalidate Cache]
-    
-    D -->|Cache First| G[Check Cache → DB Fallback]
-    D -->|Network First| H[Try DB → Cache Fallback]
-    D -->|Stale-While-Revalidate| I[Return Cache → Refresh Background]
-```
-
----
-
-## Implementation Steps
-
-```mermaid
-flowchart TD
-    A[1. Initialize CacheService] --> B[2. Register Collections]
-    B --> C[3. Setup Auto-Invalidation]
-    C --> D[4. Apply Caching to Models]
-    D --> E[5. Use Models Normally]
-    E --> F[6. Manual Invalidation When Needed]
-```
-
 
 # Cache Architecture for CRUD Operations
 
