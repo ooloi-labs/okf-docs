@@ -4,181 +4,99 @@ description: "Description goes here"
 sidebar_position: 8
 ---
 
-# MongoDB Caching Architecture
-## A Strategic Approach to Performance Optimization
 
----
+# Redis Caching for Tpls and PlatformConfigs
 
-## Implementation Steps
+This module provides a Redis-based caching layer for MongoDB collections. It optimizes database access by storing frequently accessed documents in Redis and implementing MongoDB-like query capabilities against the cache.
 
-```mermaid
-flowchart TD
-    A[1. Initialize CacheService] --> B[2. Register Collections]
-    B --> C[3. Setup Auto-Invalidation]
-    C --> D[4. Apply Caching to Models]
-    D --> E[5. Use Models Normally]
-    E --> F[6. Manual Invalidation When Needed]
+## Exported Functions
+
+### 1. `connectRedis()`
+Establishes a connection to Redis and initializes the cache by loading data from MongoDB collections by using loadCollectionsToCache function.
+
+### 2. `findInCache({ tenant, modelName, type, query })`
+Retrieves documents from Redis cache based on MongoDB-like query parameters. Falls back to MongoDB if data isn't cached.
+
+### 3. `loadCollectionsToCache()`
+Populates the Redis cache with data from configured MongoDB collections for all tenants.
+
+### 4. `setInCache({ tenant, modelName, type, val })`
+Stores a document in the Redis cache with the appropriate key.
+
+### 5. `invalidateCache({ tenant, modelName, type, newVal })`
+Removes a document from cache and replaces it with a new value if provided.
+
+## Key Structure
+
+Redis keys are structured as follows:
+
+```
+{environment}:{tenant}:{modelName}:{type}
 ```
 
----
+Where:
+- `environment`: The current environment (development, staging, production)
+- `tenant`: The tenant identifier (e.g., "gelabs")
+- `modelName`: The MongoDB collection name (e.g., "tpl")
+- `type`: The document type, determined by the `typeKey` field in the collection configuration. The  `typeKey` for `tpl` is `kp_content_type` and for `platformConfigs` it is `type`
 
-## CRUD Operations + Cache
+This hierarchical key structure enables efficient organization and retrieval of cached data across multiple environments, tenants, and collections.
 
-```mermaid
-flowchart TD
-    A[Operation] --> B{Operation Type}
-    B -->|Create| C[Execute DB → Invalidate Cache]
-    B -->|Read| D{Cache Strategy}
-    B -->|Update| E[Execute DB → Invalidate Cache]
-    B -->|Delete| F[Execute DB → Invalidate Cache]
-    
-    D -->|Cache First| G[Check Cache → DB Fallback]
-    D -->|Network First| H[Try DB → Cache Fallback]
-    D -->|Stale-While-Revalidate| I[Return Cache → Refresh Background]
+## Detailed Function Analysis
+
+### `findInCache` Function
+
+The `findInCache` function retrieves documents from Redis cache based on MongoDB-like queries:
+
+1. **Key Generation**:
+   - Constructs a key prefix based on environment, tenant, and model name
+   - Uses wildcard matching (`*`) when type is not specified to retrieve all documents of a model
+
+2. **Cache Miss Handling**:
+   - If no keys match the prefix, it's considered a cache miss
+   - The function falls back to MongoDB, retrieving data using the provided query
+   - For specific tenants (those in `listOfAllTenants`), it populates the cache with the retrieved data
+
+3. **Document Retrieval**:
+   - For cache hits, fetches all matching documents from Redis
+   - Parses the JSON string values back into JavaScript objects
+
+4. **Query Filtering**:
+   - If no query is provided, returns all fetched documents
+   - Otherwise, filters documents using the `matchesQuery` helper function
+   - Supports MongoDB-like query operators (`$ne`, `$in`) and nested property paths
+
+5. **Error Handling**:
+   - Catches and logs errors, rethrowing them to the caller
+
+The function provides a seamless interface that transparently handles cache misses, making the caching layer mostly invisible to application code.
+
+
+### invalidateCache Function
+
+The `invalidateCache` function manages cache consistency when documents are modified:
+
+```javascript
+invalidateCache({ tenant, modelName, type, newVal })
 ```
 
----
+#### Process Flow:
 
-## Write Operations Flow
+1. **Key Determination**:
+   - Generates the Redis key for the specific document using tenant, modelName, and type
 
-```mermaid
-flowchart TD
-    A[Write Operation] --> B[Execute on Database]
-    B --> C{Operation Type}
-    C -->|Create| D[Post-save Hook]
-    C -->|Update| E[Post-update Hook]
-    C -->|Delete| F[Post-delete Hook]
-    D --> G[Invalidate Collection Cache]
-    E --> H[Invalidate Collection Cache]
-    F --> I[Invalidate Collection Cache]
-    A -->|Bulk Operations| J[Manual Invalidation]
-```
+2. **Cache Deletion**:
+   - Removes the existing document from the cache using the `clearAsync` function
 
----
+3. **Optional Update**:
+   - If `newVal` is provided, attempts to store the updated document in the cache
+   - Error handling ensures that cache update failures are logged but don't interrupt the process
 
-## Configuration Process
+#### Note:
+  According to the current usecases this function is called only after a database operation.
+  We should include this function call within the MongoDB transaction.
+  Otherwise, if the database operation succeeds but cache deletion fails, the cache will hold the outdated data.
 
-```mermaid
-flowchart TD
-    A[Initialize CacheService] --> E[Register Collections]
-    E --> F[Configure Strategy]
-    E --> G[Set TTL]
-    E --> H[Define Key Generator]
-    E --> I[Specify Operations]
-    A --> J[Setup Auto-Invalidation]
-    A --> K[Apply to Models]
-```
-
----
-
-## Architecture Overview
-
-```mermaid
-flowchart TD
-    A[Application] --> B[CacheService]
-    B --> C[Cache Store]
-    B --> D[MongoDB]
-    C -->|Redis| E[Remote Cache]
-    
-    
-    style B fill:#f9f,stroke:#333,stroke-width:2px
-    style C fill:#bbf,stroke:#333,stroke-width:2px
-    style D fill:#bfb,stroke:#333,stroke-width:2px
-```
-
----
-
-## Read Operation: Cache-First Strategy
-
-```mermaid
-flowchart TD
-    A[Query Request] --> B{Check Cache}
-    B -->|Cache Hit| C[Return Cached Data]
-    B -->|Cache Miss| D[Query Database]
-    D --> E[Store in Cache]
-    E --> F[Return Fresh Data]
-```
-
----
-
-## Read Operation: Network-First Strategy
-
-```mermaid
-flowchart TD
-    A[Query Request] --> B[Query Database]
-    B -->|Success| C[Store in Cache]
-    C --> E[Return Fresh Data]
-```
-
----
-
-## Read Operation: Stale-While-Revalidate
-
-```mermaid
-flowchart TD
-    A[Query Request] --> B{Check Cache}
-    B -->|Cache Hit| C[Return Cached Data]
-    B -->|Cache Miss| D[Wait for Database]
-    C --> E[Refresh in Background]
-    D --> F[Query Database]
-    F --> G[Store in Cache]
-    F --> H[Return Fresh Data]
-```
-
----
-
-## Cache Invalidation Process
-
-```mermaid
-flowchart TD
-    A[Invalidation Request] --> B{Scope}
-    B -->|Specific Query| C[Generate Query Hash]
-    B -->|Entire Collection| D[Generate Collection Pattern]
-    C --> E{Cache Type}
-    D --> E
-    E -->|Redis| F[Get Matching Keys]
-    F --> H[Delete Keys]
-```
-
----
-
-# Cache Architecture for CRUD Operations
-
-| Operation Phase | Create (C) | Read (R) | Update (U) | Delete (D) |
-|----------------|------------|----------|------------|------------|
-| **Cache Check** | ✗ | ✓ | ✗ | ✗ |
-| **Execute Database Operation** | ✓ | ✗ OR ✓ | ✓ | ✓ |
-| **Cache Update** | ✗  | ✗ OR ✓ | ✗ | ✗ |
-| **Cache Invalidation** | ✓ | ✗ | ✓ | ✓ |
-| **Strategy Application** | ✗ | ✓ | ✗ | ✗ |
-| **Background Refresh** (stale-while-revalidate) | ✗ | ✓ | ✗ | ✗ |
-| **Auto-Invalidation via Middleware** | ✓ | ✗ | ✓ | ✓ |
-| **Manual Invalidation Support** | ✓ | ✗ | ✓ | ✓ |
-| **Collection-Level Invalidation** | ✓ | ✗ | ✓ | ✓ |
-| **Query-Specific Invalidation** | ✓ | ✗ | ✓ | ✓ |
-
-## Explanation of Operations
-
-1. **Cache Check**: Only performed during read operations to check if data exists in cache before accessing the database.
-
-2. **Execute Database Operation**: All CRUD operations ultimately execute against the database.
-
-3. **Cache Update**: Only read operations update the cache with fresh data (depending on caching strategy).
-
-4. **Cache Invalidation**: Create, update, and delete operations trigger cache invalidation to maintain consistency.
-
-5. **Strategy Application**: Caching strategies (cache-first, network-first, stale-while-revalidate) only apply to read operations.
-
-6. **Background Refresh**: Only applicable in read operations with stale-while-revalidate strategy.
-
-7. **Auto-Invalidation via Middleware**: Mongoose middleware automatically invalidates cache entries for create, update, and delete operations.
-
-8. **Manual Invalidation Support**: Available for create, update, and delete operations when automatic invalidation isn't sufficient.
-
-9. **Collection-Level Invalidation**: Entire collections can be invalidated on bulk create, update, or delete operations.
-
-10. **Query-Specific Invalidation**: Specific queries can be invalidated based on document IDs for targeted create, update, or delete operations.
-
-
+This approach implements a "write-through" cache pattern, where writes go to both the database and cache, helping maintain cache coherence in a distributed system.
 
 
