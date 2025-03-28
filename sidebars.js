@@ -144,6 +144,7 @@ const sidebars = {
         'api-docs/apis/getData',
       ],
     },
+    'api-docs/redisFunctions',
   ],
 };
 
